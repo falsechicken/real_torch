@@ -33,7 +33,7 @@ minetest.override_item("default:torch", {
 
 	on_timer = function(pos, elapsed)
 		local p2 = minetest.get_node(pos).param2
-		minetest.swap_node(pos, {name = "real_torch:torch", param2 = p2})
+		minetest.set_node(pos, {name = "real_torch:torch", param2 = p2})
 	end,
 
 	on_construct = function(pos)
@@ -68,7 +68,7 @@ minetest.register_craftitem("real_torch:coal_powder", {
 		local nod = minetest.get_node(pos)
 
 		if nod.name == "real_torch:torch" then
-			minetest.swap_node(pos, {name = "default:torch", param2 = nod.param2})
+			minetest.set_node(pos, {name = "default:torch", param2 = nod.param2})
 			itemstack:take_item()
 			return itemstack
 		end
@@ -132,7 +132,7 @@ minetest.register_abm({
 
 		if num > 0 then
 
-			minetest.swap_node(pos, {name = "air"})
+			minetest.set_node(pos, {name = "air"})
 
 			if node.name == "default:torch" then
 				node.name = "real_torch:torch"
