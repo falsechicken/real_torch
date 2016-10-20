@@ -46,7 +46,7 @@ minetest.register_lbm({
 	name = "real_torch:convert_torch_to_node_timer",
 	nodenames = {"default:torch"},
 	action = function(pos)
-		if minetest.get_node_timer(pos):is_started() == false then
+		if not minetest.get_node_timer(pos):is_started() then
 			minetest.get_node_timer(pos):start(math.random(480, 600))
 		end
 	end
