@@ -56,6 +56,23 @@ minetest.register_lbm({
 minetest.register_craftitem("real_torch:coal_powder", {
 	description = "Coal Powder",
 	inventory_image = "real_torch_coal_powder.png",
+
+	-- punching unlit torch with coal powder relights
+	on_use = function(itemstack, user, pointed_thing)
+
+		if not pointed_thing or pointed_thing.type ~= "node" then
+			return
+		end
+
+		local pos = pointed_thing.under
+		local nod = minetest.get_node(pos)
+
+		if nod.name == "real_torch:torch" then
+			minetest.swap_node(pos, {name = "default:torch", param2 = nod.param2})
+			itemstack:take_item()
+			return itemstack
+		end
+	end,
 })
 
 minetest.register_craft({
