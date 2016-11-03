@@ -83,8 +83,8 @@ minetest.register_craft({
 
 minetest.register_craft({
 	type = "shapeless",
-	output = "real_torch:coal_powder 4",
-	recipe = {"default:coal_lump"},
+	output = "real_torch:coal_powder 8",
+	recipe = {"default:coal_lump", "default:coal_lump"},
 })
 
 -- coal powder can make black dye
