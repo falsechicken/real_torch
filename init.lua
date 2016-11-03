@@ -90,7 +90,7 @@ minetest.register_craft({
 -- coal powder can make black dye
 minetest.register_craft({
 	type = "shapeless",
-	output = "dye:black 2",
+	output = "dye:black",
 	recipe = {"real_torch:coal_powder"},
 })
 
