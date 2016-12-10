@@ -7,6 +7,8 @@ This mod changed minetest torches so that they have a life of 8-10 minutes.
 - water near torches make them drop as unlit torches
 - coal powder can also be used for fuel or crafted into black dye
 
+https://forum.minetest.net/viewtopic.php?f=11&t=15721
+
 Changelog:
 
 - 0.1 - Initial upload
