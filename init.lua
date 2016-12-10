@@ -1,106 +1,27 @@
 
 -- Realistic Torch mod by TenPlus1
 
--- unlit torch
-minetest.register_node("real_torch:torch", {
-	description = "Unlit Torch",
-	drawtype = "torchlike",
-	tiles = {
-		{name = "real_torch_floor.png"},
-		{name = "real_torch_ceiling.png"},
-		{name = "real_torch_wall.png"},
-	},
-	inventory_image = "real_torch_floor.png",
-	wield_image = "real_torch_floor.png",
-	paramtype = "light",
-	paramtype2 = "wallmounted",
-	sunlight_propagates = true,
-	is_ground_content = false,
-	walkable = false,
-	selection_box = {
-		type = "wallmounted",
-		wall_top = {-0.1, 0.5 - 0.6, -0.1, 0.1, 0.5, 0.1},
-		wall_bottom = {-0.1, -0.5, -0.1, 0.1, -0.5 + 0.6, 0.1},
-		wall_side = {-0.5, -0.3, -0.1, -0.5 + 0.3, 0.3, 0.1},
-	},
-	groups = {choppy = 2, dig_immediate = 3, attached_node = 1},
-	legacy_wallmounted = true,
-	sounds = default.node_sound_defaults(),
-})
 
--- override default torches to burn out after 8-10 minutes
--- also converts 3D torches back into 2D.
-minetest.override_item("default:torch", {
+-- check which torch(es) are available in minetest version
+if minetest.registered_nodes["default:torch_ceiling"] then
 
-	description = "Torch",
-	drawtype = "torchlike",
-	tiles = {
-		{
-			name = "default_torch_on_floor_animated.png",
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 16,
-				aspect_h = 16,
-				length = 3.0
-			},
-		},
-		{
-			name="default_torch_on_ceiling_animated.png",
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 16,
-				aspect_h = 16,
-				length = 3.0
-			},
-		},
-		{
-			name="default_torch_animated.png",
-			animation = {
-				type = "vertical_frames",
-				aspect_w = 16,
-				aspect_h = 16,
-				length = 3.0
-			},
-		},
-	},
-	inventory_image = "default_torch_on_floor.png",
-	wield_image = "default_torch_on_floor.png",
-	paramtype = "light",
-	paramtype2 = "wallmounted",
-	sunlight_propagates = true,
-	is_ground_content = false,
-	walkable = false,
-	light_source = default.LIGHT_MAX - 1,
-	selection_box = {
-		type = "wallmounted",
-		wall_top = {-0.1, 0.5 - 0.6, -0.1, 0.1, 0.5, 0.1},
-		wall_bottom = {-0.1, -0.5, -0.1, 0.1, -0.5 + 0.6, 0.1},
-		wall_side = {-0.5, -0.3, -0.1, -0.5 + 0.3, 0.3, 0.1},
-	},
-	groups = {choppy = 2, dig_immediate = 3, flammable = 1, attached_node = 1},
-	legacy_wallmounted = true,
-	sounds = default.node_sound_defaults(),
+	dofile(minetest.get_modpath("real_torch") .. "/3d.lua")
+else
+	dofile(minetest.get_modpath("real_torch") .. "/2d.lua")
+end
 
-	on_timer = function(pos, elapsed)
-		local p2 = minetest.get_node(pos).param2
-		minetest.set_node(pos, {name = "real_torch:torch", param2 = p2})
-	end,
-
-	on_construct = function(pos)
-		minetest.get_node_timer(pos):start(math.random(480, 600))
-	end,
-})
 
 -- start timer on any already placed torches
 minetest.register_lbm({
 	name = "real_torch:convert_torch_to_node_timer",
-	nodenames = {"default:torch"},
+	nodenames = {"default:torch", "default:torch_wall", "default:torch_ceiling"},
 	action = function(pos)
 		if not minetest.get_node_timer(pos):is_started() then
 			minetest.get_node_timer(pos):start(math.random(480, 600))
 		end
 	end
 })
+
 
 -- coal powder
 minetest.register_craftitem("real_torch:coal_powder", {
@@ -118,19 +39,33 @@ minetest.register_craftitem("real_torch:coal_powder", {
 		local nod = minetest.get_node(pos)
 
 		if nod.name == "real_torch:torch" then
+
 			minetest.set_node(pos, {name = "default:torch", param2 = nod.param2})
 			itemstack:take_item()
-			return itemstack
+
+		elseif nod.name == "real_torch:torch_wall" then
+
+			minetest.set_node(pos, {name = "default:torch_wall", param2 = nod.param2})
+			itemstack:take_item()
+
+		elseif nod.name == "real_torch:torch_ceiling" then
+
+			minetest.set_node(pos, {name = "default:torch_ceiling", param2 = nod.param2})
+			itemstack:take_item()
 		end
+
+		return itemstack
 	end,
 })
 
+-- use coal powder as furnace fuel
 minetest.register_craft({
 	type = "fuel",
 	recipe = "real_torch:coal_powder",
 	burntime = 10,
 })
 
+-- 2x coal lumps = 8x coal powder
 minetest.register_craft({
 	type = "shapeless",
 	output = "real_torch:coal_powder 8",
@@ -157,7 +92,10 @@ if not minetest.get_modpath("xanadu") then
 -- if torch touches water then drop as unlit torch
 minetest.register_abm({
 	label = "Real Torch water check",
-	nodenames = {"default:torch", "real_torch:torch"},
+	nodenames = {
+		"default:torch", "default:torch_wall", "default:torch:ceiling",
+		"real_torch:torch", "real_torch:torch_wall", "real_torch:torch_ceiling"
+	},
 	neighbors = {"group:water"},
 	interval = 5,
 	chance = 1,
@@ -169,26 +107,23 @@ minetest.register_abm({
 			{x = pos.x - 1, y = pos.y, z = pos.z},
 			{x = pos.x + 1, y = pos.y, z = pos.z},
 			{"group:water"})
-
+if num == 0 then
 		num = num + #minetest.find_nodes_in_area(
 			{x = pos.x, y = pos.y, z = pos.z - 1},
 			{x = pos.x, y = pos.y, z = pos.z + 1},
 			{"group:water"})
-
+end
+if num == 0 then
 		num = num + #minetest.find_nodes_in_area(
 			{x = pos.x, y = pos.y + 1, z = pos.z},
 			{x = pos.x, y = pos.y + 1, z = pos.z},
 			{"group:water"})
-
+end
 		if num > 0 then
 
 			minetest.set_node(pos, {name = "air"})
 
-			if node.name == "default:torch" then
-				node.name = "real_torch:torch"
-			end
-
-			minetest.add_item(pos, {name = node.name})
+			minetest.add_item(pos, {name = "real_torch:torch"})
 		end
 	end,
 })

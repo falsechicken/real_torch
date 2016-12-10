@@ -12,3 +12,4 @@ Changelog:
 - 0.1 - Initial upload
 - 0.2 - Punching unlit torch with coal powder relights torch
 - 0.3 - Torches are 2D and override any that are 3D
+- 0.4 - Changed my mind, now detects old 2D or new 3D torches and works accordingly
