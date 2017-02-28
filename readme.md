@@ -15,3 +15,5 @@ Changelog:
 - 0.2 - Punching unlit torch with coal powder relights torch
 - 0.3 - Torches are 2D and override any that are 3D
 - 0.4 - Changed my mind, now detects old 2D or new 3D torches and works accordingly
+- 0.5 - 2x coal lumps give 10x coal dust, also fixed check for ethereal mod
+

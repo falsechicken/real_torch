@@ -68,7 +68,7 @@ minetest.register_craft({
 -- 2x coal lumps = 8x coal powder
 minetest.register_craft({
 	type = "shapeless",
-	output = "real_torch:coal_powder 8",
+	output = "real_torch:coal_powder 10",
 	recipe = {"default:coal_lump", "default:coal_lump"},
 })
 
@@ -87,7 +87,7 @@ minetest.register_craft({
 })
 
 -- Make sure Ethereal mod isn't running as this Abm already exists there
-if not minetest.get_modpath("xanadu") then
+if not minetest.get_modpath("ethereal") then
 
 -- if torch touches water then drop as unlit torch
 minetest.register_abm({
