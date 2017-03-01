@@ -107,21 +107,26 @@ minetest.register_abm({
 			{x = pos.x - 1, y = pos.y, z = pos.z},
 			{x = pos.x + 1, y = pos.y, z = pos.z},
 			{"group:water"})
-if num == 0 then
-		num = num + #minetest.find_nodes_in_area(
-			{x = pos.x, y = pos.y, z = pos.z - 1},
-			{x = pos.x, y = pos.y, z = pos.z + 1},
-			{"group:water"})
-end
-if num == 0 then
-		num = num + #minetest.find_nodes_in_area(
-			{x = pos.x, y = pos.y + 1, z = pos.z},
-			{x = pos.x, y = pos.y + 1, z = pos.z},
-			{"group:water"})
-end
-		if num > 0 then
 
+		if num == 0 then
+			num = num + #minetest.find_nodes_in_area(
+				{x = pos.x, y = pos.y, z = pos.z - 1},
+				{x = pos.x, y = pos.y, z = pos.z + 1},
+				{"group:water"})
+		end
+
+		if num == 0 then
+			num = num + #minetest.find_nodes_in_area(
+				{x = pos.x, y = pos.y + 1, z = pos.z},
+				{x = pos.x, y = pos.y + 1, z = pos.z},
+				{"group:water"})
+		end
+
+		if num > 0 then
 			minetest.set_node(pos, {name = "air"})
+
+			minetest.sound_play({name="real_torch_extinguish", gain = 0.2},
+				{pos = pos, max_hear_distance = 10})
 
 			minetest.add_item(pos, {name = "real_torch:torch"})
 		end

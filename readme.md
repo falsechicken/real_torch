@@ -1,6 +1,6 @@
 Real Torch by TenPlus1
 
-This mod changed minetest torches so that they have a life of 8-10 minutes.
+This mod changes minetest torches so that they have a life of 8-10 minutes.
 
 - coal lumps can be crafted into coal powder
 - coal powder and an unlit torch can be crafted into a lit torch again
@@ -17,4 +17,4 @@ Changelog:
 - 0.3 - Torches are 2D and override any that are 3D
 - 0.4 - Changed my mind, now detects old 2D or new 3D torches and works accordingly
 - 0.5 - 2x coal lumps give 10x coal dust, also fixed check for ethereal mod
-
+- 0.6 - Burnout and extinguish sounds added by tacotexmex :)

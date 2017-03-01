@@ -101,6 +101,8 @@ minetest.override_item("default:torch", {
 	on_timer = function(pos, elapsed)
 		local p2 = minetest.get_node(pos).param2
 		minetest.set_node(pos, {name = "real_torch:torch", param2 = p2})
+		minetest.sound_play({name="real_torch_burnout", gain = 0.1},
+			{pos = pos, max_hear_distance = 10})
 	end,
 
 	on_construct = function(pos)
@@ -114,6 +116,8 @@ minetest.override_item("default:torch_wall", {
 	on_timer = function(pos, elapsed)
 		local p2 = minetest.get_node(pos).param2
 		minetest.set_node(pos, {name = "real_torch:torch_wall", param2 = p2})
+		minetest.sound_play({name="real_torch_burnout", gain = 0.1},
+			{pos = pos, max_hear_distance = 10})
 	end,
 
 	on_construct = function(pos)
@@ -127,6 +131,8 @@ minetest.override_item("default:torch_ceiling", {
 	on_timer = function(pos, elapsed)
 		local p2 = minetest.get_node(pos).param2
 		minetest.set_node(pos, {name = "real_torch:torch_ceiling", param2 = p2})
+		minetest.sound_play({name="real_torch_burnout", gain = 0.1},
+			{pos = pos, max_hear_distance = 10})
 	end,
 
 	on_construct = function(pos)
