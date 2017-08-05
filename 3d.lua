@@ -106,7 +106,7 @@ minetest.override_item("default:torch", {
 	end,
 
 	on_construct = function(pos)
-		minetest.get_node_timer(pos):start(math.random(480, 600))
+		minetest.get_node_timer(pos):start(math.random(torch_min_duration, torch_max_duration))
 	end,
 })
 
@@ -121,7 +121,7 @@ minetest.override_item("default:torch_wall", {
 	end,
 
 	on_construct = function(pos)
-		minetest.get_node_timer(pos):start(math.random(480, 600))
+		minetest.get_node_timer(pos):start(math.random(torch_min_duration, torch_max_duration))
 	end,
 })
 
@@ -136,6 +136,6 @@ minetest.override_item("default:torch_ceiling", {
 	end,
 
 	on_construct = function(pos)
-		minetest.get_node_timer(pos):start(math.random(480, 600))
+		minetest.get_node_timer(pos):start(math.random(torch_min_duration, torch_max_duration))
 	end,
 })

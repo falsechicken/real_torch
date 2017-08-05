@@ -1,6 +1,16 @@
 
 -- Realistic Torch mod by TenPlus1
 
+torch_min_duration = tonumber(minetest.settings:get("torch_min_duration"))
+torch_max_duration = tonumber(minetest.settings:get("torch_max_duration"))
+
+if torch_min_duration == nil then
+	torch_min_duration = 480 
+end
+
+if torch_max_duration == nil then
+	torch_max_duration = 600
+end
 
 -- check which torch(es) are available in minetest version
 if minetest.registered_nodes["default:torch_ceiling"] then
@@ -17,7 +27,7 @@ minetest.register_lbm({
 	nodenames = {"default:torch", "default:torch_wall", "default:torch_ceiling"},
 	action = function(pos)
 		if not minetest.get_node_timer(pos):is_started() then
-			minetest.get_node_timer(pos):start(math.random(480, 600))
+			minetest.get_node_timer(pos):start(math.random(torch_min_duration, torch_max_duration))
 		end
 	end
 })
